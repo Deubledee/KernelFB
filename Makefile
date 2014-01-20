@@ -1,5 +1,5 @@
 LIB	= libkfb.a
-OBJS = src/dbg_print.o src/fb_handlers.o src/kernelfb.o src/rgb888_32.o src/vga16fb.o
+OBJS = src/dbg_print.o src/fb_handlers.o src/kernelfb.o src/rgb888_32.o src/vga16fb.o src/general.o src/pixel_font.o
 
 KERNEL_DIR := /lib/modules/$(shell uname -r)/build/include
 X86_ASMDIR := /lib/modules/$(shell uname -r)/build/arch/x86/include
@@ -16,4 +16,4 @@ libkfb.a:$(OBJS)
 	$(AR) $(ARFLAGS) -o $@ $^
 
 clean:
-	rm -r *.o *.a
+	rm -f *.o *.a

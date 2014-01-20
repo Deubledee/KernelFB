@@ -4,18 +4,36 @@
 #include <linux/fb.h>
 #include <linux/syscalls.h>
 #include <linux/types.h>
-#include "dbg_print.h"
 
 #define KFB_OPS_MAX 4
 
 struct kfb_handle;
+
 struct kfb_color{
-	u_int8_t r, g, b;
+	u_int8_t r, g, b, a;
 };
+typedef struct kfb_color kfb_color_t;
+
+struct kfb_point{
+	unsigned int x, y;
+};
+typedef struct kfb_point kfb_point_t;
+
 
 struct kfb_ops{
-	void (*set_pixel)(unsigned int i, unsigned int j, const struct kfb_color* color, struct kfb_handle* handle);
-	u_int32_t (*color_to_uint32)(const struct kfb_color* color);
+	void (*set_pixel)(unsigned int i, unsigned int j, struct kfb_color color, struct kfb_handle* handle);
+	
+	u_int32_t (*color_to_uint32)(struct kfb_color color);
+	
+	struct kfb_point (*print_char)(char c, unsigned int i, unsigned int j, 
+								struct kfb_color fore_color, 
+								struct kfb_color bg_color, 
+								struct kfb_handle* handle);
+	struct kfb_point (*print_str)(const char* str, unsigned int i, unsigned int j, 
+								struct kfb_color fore_color, 
+								struct kfb_color bg_color, 
+								int wrap_text, unsigned int wrap_start_x, unsigned int wrap_end_x,
+								struct kfb_handle* handle);
 };
 
 struct kfb_handle{
@@ -42,4 +60,8 @@ static inline struct kfb_color MAKE_COLOR(u_int8_t r, u_int8_t g, u_int8_t b){
 	struct kfb_color k = {r, g, b};
 	return k;
 }
+
+#define DEFAULT_FONT_WIDTH	8
+#define DEFAULT_FONT_HEIGHT	16
+
 #endif
