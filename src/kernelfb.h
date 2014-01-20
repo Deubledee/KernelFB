@@ -34,6 +34,18 @@ struct kfb_ops{
 								struct kfb_color bg_color, 
 								int wrap_text, unsigned int wrap_start_x, unsigned int wrap_end_x,
 								struct kfb_handle* handle);
+	void (*draw_rect)(unsigned int x1, unsigned int y1, unsigned int x2,unsigned int y2,
+						struct kfb_color border_color, unsigned int border_width, struct kfb_color fill_color, 
+						struct kfb_handle* handle);
+	void (*fill_rect)(unsigned int x1, unsigned int y1, unsigned int x2,unsigned int y2,
+						struct kfb_color fill_color, 
+						struct kfb_handle* handle);
+	void (*draw_hline)(unsigned int x1, unsigned int x2, unsigned int y,
+						struct kfb_color line_color, unsigned int width,
+						struct kfb_handle* handle);
+	void (*draw_vline)(unsigned int x, unsigned int y1, unsigned int y2,
+						struct kfb_color line_color, unsigned int width,
+						struct kfb_handle* handle);
 };
 
 struct kfb_handle{

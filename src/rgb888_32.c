@@ -7,7 +7,11 @@ struct kfb_ops kfb_ops_rgb888_32 = {
 	.set_pixel = rgb888_32_set_pixel,
 	.color_to_uint32 = rgb888_32_color_to_uint32,
 	.print_char = general_print_char,
-	.print_str = general_print_str
+	.print_str = general_print_str,
+	.draw_rect = general_draw_rect,
+	.draw_hline = general_draw_hline,
+	.draw_vline = general_draw_vline,
+	.fill_rect = general_fill_rect
 };
 
 void rgb888_32_set_pixel(unsigned int i, unsigned int j, struct kfb_color color, struct kfb_handle* handle){
@@ -19,8 +23,10 @@ void rgb888_32_set_pixel(unsigned int i, unsigned int j, struct kfb_color color,
 	
 	index = (j * handle->vinfo.xres + i) * 4;
 	
-	if(index + 4 > handle->buffer_length)
+	if(index + 4 > handle->buffer_length){
+		kfb_printe("index is larger than buffer_length\n");
 		return;
+	}
 		
 	icolor = rgb888_32_color_to_uint32(color);
 	handle->buffer[index] = (unsigned char)((icolor >> 24) & 0x000000FF);

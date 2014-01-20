@@ -2,6 +2,13 @@
 #include "general.h"
 #include "pixel_font.h"
 
+static void uintswap(unsigned int* x, unsigned int *y){
+	unsigned int t;
+	t = *x;
+	*x = *y;
+	*y = t;
+}
+
 struct kfb_point general_print_char(char c, unsigned int i, unsigned int j, 
 							struct kfb_color fore_color, 
 							struct kfb_color bg_color, 
@@ -58,4 +65,62 @@ struct kfb_point general_print_str(const char* str, unsigned int i, unsigned int
 	
 	point.x = i, point.y = j;
 	return point;
+}
+
+void general_draw_rect(unsigned int x1, unsigned int y1, unsigned int x2,unsigned int y2,
+						struct kfb_color border_color, unsigned int border_width, struct kfb_color fill_color, 
+						struct kfb_handle* handle){
+	unsigned int tmp = (border_width - 1) / 2;
+	
+	if(x1 > x2)
+		uintswap(&x1, &x2);
+	if(y1 > y2)
+		uintswap(&y1, &y2);
+		
+	handle->ops->draw_hline(x1 - tmp, x2 - tmp + border_width, y1, border_color, border_width, handle);
+	handle->ops->draw_hline(x1 - tmp, x2 - tmp + border_width, y2, border_color, border_width, handle);
+	handle->ops->draw_vline(x1, y1 - tmp + border_width + 1, y2 - tmp - 1, border_color, border_width, handle);
+	handle->ops->draw_vline(x2, y1 - tmp + border_width + 1, y2 - tmp - 1, border_color, border_width, handle);
+	
+	handle->ops->fill_rect(x1 - tmp + border_width, y1 - tmp + border_width, x2 - tmp, y2 - tmp, fill_color, handle);
+}
+						
+void general_fill_rect(unsigned int x1, unsigned int y1, unsigned int x2,unsigned int y2,
+						struct kfb_color fill_color, 
+						struct kfb_handle* handle){
+	unsigned int i, j;
+	
+	if(x1 >= handle->vinfo.xres)
+		x1 = handle->vinfo.xres - 1;
+	if(x2 >= handle->vinfo.xres)
+		x2 = handle->vinfo.xres - 1;
+		
+	if(y1 >= handle->vinfo.yres)
+		y1 = handle->vinfo.yres - 1;
+	if(y2 >= handle->vinfo.yres)
+		y2 = handle->vinfo.yres - 1;
+		
+	if(x1 > x2)
+		uintswap(&x1, &x2);
+	if(y1 > y2)
+		uintswap(&y1, &y2);
+		
+	for(i = x1; i <= x2; i++)
+		for(j = y1; j <= y2; j++)
+			handle->ops->set_pixel(i, j, fill_color, handle);
+}
+						
+						
+void general_draw_hline(unsigned int x1, unsigned int x2, unsigned int y,
+						struct kfb_color line_color, unsigned int width,
+						struct kfb_handle* handle){
+	unsigned int tmp = (width - 1) / 2;
+	handle->ops->fill_rect(x1, y - tmp, x2, y - tmp + width, line_color, handle);
+}
+
+void general_draw_vline(unsigned int x, unsigned int y1, unsigned int y2,
+						struct kfb_color line_color, unsigned int width,
+						struct kfb_handle* handle){
+	unsigned int tmp = (width - 1 ) / 2;
+	handle->ops->fill_rect(x - tmp, y1, x - tmp + width, y2, line_color, handle);
 }

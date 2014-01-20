@@ -17,7 +17,11 @@ struct kfb_ops kfb_ops_vga16fb = {
 	.set_pixel = vga16fb_set_pixel,
 	.color_to_uint32 = vga16fb_color_to_uint32,
 	.print_char = vga16fb_print_char,
-	.print_str = vga16fb_print_str
+	.print_str = vga16fb_print_str,
+	.draw_rect = general_draw_rect,
+	.draw_hline = general_draw_hline,
+	.draw_vline = general_draw_vline,
+	.fill_rect = general_fill_rect
 };
 
 
