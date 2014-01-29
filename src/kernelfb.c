@@ -1,5 +1,6 @@
 
 #include "kernelfb.h"
+#include "dbg_print.h"
 #include <asm/uaccess.h>
 
 static struct kfb_ops* get_proper_ops(kfb_handle_t *handle){

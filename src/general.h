@@ -5,11 +5,12 @@ struct kfb_point general_print_char(char c, unsigned int i, unsigned int j,
 							struct kfb_color bg_color, 
 							struct kfb_handle* handle);
 							
-struct kfb_point general_print_str(const char* str, unsigned int i, unsigned int j, 
-							struct kfb_color fore_color, 
-							struct kfb_color bg_color, 
-							int wrap_text, unsigned int wrap_start_x, unsigned int wrap_end_x,
-							struct kfb_handle* handle);
+struct kfb_point general_print_str(const char* str, unsigned int x1, unsigned int x2, 
+								unsigned int y, 
+								struct kfb_color fore_color, 
+								struct kfb_color bg_color, 
+								int wrap_text, unsigned int wrap_start_x,
+								struct kfb_handle* handle);
 							
 void general_draw_rect(unsigned int x1, unsigned int y1, unsigned int x2,unsigned int y2,
 						struct kfb_color border_color, unsigned int border_width, struct kfb_color fill_color, 

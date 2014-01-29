@@ -23,16 +23,21 @@ typedef struct kfb_point kfb_point_t;
 struct kfb_ops{
 	void (*set_pixel)(unsigned int i, unsigned int j, struct kfb_color color, struct kfb_handle* handle);
 	
+	void (*get_pixel)(unsigned int i, unsigned int j, struct kfb_color* color, struct kfb_handle* handle);
+	
 	u_int32_t (*color_to_uint32)(struct kfb_color color);
+	
+	struct kfb_color (*uint32_to_color)(u_int32_t color);
 	
 	struct kfb_point (*print_char)(char c, unsigned int i, unsigned int j, 
 								struct kfb_color fore_color, 
 								struct kfb_color bg_color, 
 								struct kfb_handle* handle);
-	struct kfb_point (*print_str)(const char* str, unsigned int i, unsigned int j, 
+	struct kfb_point (*print_str)(const char* str, unsigned int x1, unsigned int x2, 
+								unsigned int y, 
 								struct kfb_color fore_color, 
 								struct kfb_color bg_color, 
-								int wrap_text, unsigned int wrap_start_x, unsigned int wrap_end_x,
+								int wrap_text, unsigned int wrap_start_x,
 								struct kfb_handle* handle);
 	void (*draw_rect)(unsigned int x1, unsigned int y1, unsigned int x2,unsigned int y2,
 						struct kfb_color border_color, unsigned int border_width, struct kfb_color fill_color, 
@@ -75,5 +80,9 @@ static inline struct kfb_color MAKE_COLOR(u_int8_t r, u_int8_t g, u_int8_t b){
 
 #define DEFAULT_FONT_WIDTH	8
 #define DEFAULT_FONT_HEIGHT	16
+
+
+static inline unsigned int get_current_font_width(void){return DEFAULT_FONT_WIDTH;}
+static inline unsigned int get_current_font_height(void){return DEFAULT_FONT_HEIGHT;}
 
 #endif
